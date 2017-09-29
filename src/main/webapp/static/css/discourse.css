@@ -1,0 +1,95 @@
+.d-header{
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,0.25);
+
+}
+.btn-primary{
+    color:#4285f4;
+}
+
+.menu-panel{
+    /* box-shadow: 0 1px 2px rgba(0,0,0,0.25); */
+}
+.topic-list>tbody>tr {
+    border-bottom: 0.3px solid #eeeeee;
+}
+.topic-list th, .topic-list td {
+    padding: 12px 5px;
+    padding-bottom: 20px;
+}
+#ember673{
+    background-color: #fefefe;
+}
+#main-outlet>div>div.container{
+    border-bottom: 1px solid #eeeeee;
+    background-color: #ffffff;
+}
+.topic-list th:first-of-type, .topic-list td:first-of-type {
+    background-color: #fff;
+
+}
+
+#main>.ember-view{
+    background-color: #eeeeee;
+}
+.list-controls .category-breadcrumb li.bullet>.dropdown-header{
+     background: rgb(243,114,109);
+     color: #fff;
+ }
+#main-outlet>div>div.container {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.list-controls>div.container{
+    border-bottom: 10px solid #eeeeee;
+    background-color: #ffffff;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.topic-list th, .topic-list td {
+    background-color: #fff !important;
+}
+.topic-list th {
+    color: #919191;
+    font-weight: normal;
+    font-size: 1em;
+    border-bottom: 1px solid #eeeeee !important;
+}
+
+.footer-message.ember-view{
+    background-color: #fff;
+    padding: 10px;
+}
+#topic-title>div.container{
+    background-color: #fff;
+    padding: 10px;
+}
+
+#ember729,#ember732{
+    display: none;
+}
+#ember1132>div.container{
+    display: none;
+}
+div.container.list-container  #list-area{
+    background-color: #fff;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.alert.alert-info.alert-bootstrap-mode{
+     display: none;
+ }
+
+.full-width>ul.nav.nav-pills{
+    background: #fff;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 5px 5px;
+}
+.admin-controls {
+    background-color: #fff;
+    background: url("http://image.golaravel.com/5/c9/44e1c4e50d55159c65da6a41bc07e.jpg") 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left: 1000px;
+}

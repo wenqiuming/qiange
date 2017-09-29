@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--只扫描controller-->
+    <context:component-scan base-package="xin.charming.controller" use-default-filters="false">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"></context:include-filter>
+    </context:component-scan>
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+    <!--from TaoYu pro-->
+    <!--注：配置必须在 <mvc:annotation-driven /> 之前，否则将不会启效；
+    <mvc:annotation-driven /> 会自动注册DefaultAnnotationHandlerMapping 与AnnotationMethodHandlerAdapter-->
+    <bean
+            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean>
+    <bean
+            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="cacheSeconds" value="0"></property>
+        <property name="webBindingInitializer" ref="webBindingInitializer"></property>
+        <property name="messageConverters">
+            <list>
+                <ref bean="stringHttpMessageConverter"/>
+                <ref bean="json2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!--2个标准配置-->
+    <!--将springmvc 不能处理的请求交给tomcat-->
+    <mvc:default-servlet-handler/>
+    <!--能支持springmvc 更高级的功能,比如JSR303校验,快捷的ajax请求.....-->
+    <mvc:annotation-driven/>
+
+    <bean id="json2HttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="application"></constructor-arg>
+                    <constructor-arg index="1" value="json"></constructor-arg>
+                    <constructor-arg index="2" value="UTF-8"></constructor-arg>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <!--<constructor-arg value="UTF-8" index="0"/>-->
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/plain;charset=UTF-8</value>
+                <value>text/html;charset=UTF-8</value>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="webBindingInitializer"
+          class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+        <property name="conversionService">
+            <bean
+                    class="org.springframework.core.convert.support.DefaultConversionService"></bean>
+        </property>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="209715200"/><!--200MB  -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="resolveLazily" value="true"/>
+    </bean>
+    <bean class="xin.charming.Interceptor.AuthInterceptor" id="authInterceptor"/>
+    <mvc:interceptors>
+        <!--<bean class="xin.charming.Interceptor.AuthInterceptor"></bean>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/addFolder"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/modFolder"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/delFolder"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/adjustOrderBy"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/addTag"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/modTag"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/delTag"/>
+            <ref bean="authInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

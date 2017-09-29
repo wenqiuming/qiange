@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tag">
+    <resultMap id="BaseResultMap" type="xin.charming.bean.Tag">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="tname" jdbcType="VARCHAR" property="tname"/>
+        <result column="icon" property="icon"/>
+        <result column="url" property="url"/>
+        <result column="type" property="type"/>
+        <result column="bg_color" property="bgColor"/>
+        <result column="top_name" property="topName"/>
+        <result column="auth" property="auth"/>
+    </resultMap>
+
+    <resultMap id="TagFolderMap" type="xin.charming.bean.TagFolder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="tname" jdbcType="VARCHAR" property="tname"/>
+        <result column="icon" property="icon"/>
+        <result column="url" property="url"/>
+        <result column="type" property="type"/>
+        <result column="bg_color" property="bgColor"/>
+        <result column="top_name" property="topName"/>
+        <result column="auth" property="auth"/>
+        <result column="folder_id" property="folderId"/>
+    </resultMap>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE FROM qg_tag
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insertTag" parameterType="xin.charming.bean.Tag">
+        INSERT INTO qg_tag (id, tname, icon, url, type, bg_color, top_name, auth) VALUES (
+            #{id}, #{tname}, #{icon}, #{url}, #{type}, #{bgColor}, #{topName}, #{auth})
+    </insert>
+
+
+    <update id="updateByPrimaryKey" parameterType="xin.charming.bean.Tag">
+        update qg_tag
+        <set>
+            <if test="null!=tname and ''!=tname ">
+                tname=#{tname},
+            </if>
+            <if test="null!=icon">
+                icon=#{icon},
+            </if>
+            <if test="null!=url and ''!=url ">
+                url=#{url},
+            </if>
+            <if test="null!=type and ''!=type ">
+                type=#{type},
+            </if>
+            <if test="null!=bgColor and ''!=bgColor ">
+                bg_color=#{bgColor},
+            </if>
+            <if test="null!=topName">
+                top_name=#{topName},
+            </if>
+            <if test="null!=auth and  0!=auth ">
+                auth=#{auth},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="queryTag" parameterType="xin.charming.bean.Tag" resultType="xin.charming.bean.Tag">
+        select * from qg_folder where 1=1
+        <if test="null!=id and 0!=id ">
+            and id=#{id}
+        </if>
+        <if test="null!=tname and ''!=tname ">
+            and tname like #{tname}
+        </if>
+        <if test="null!=icon and ''!=icon ">
+            and icon=#{icon}
+        </if>
+        <if test="null!=url and ''!=url ">
+            and url=#{url}
+        </if>
+        <if test="null!=type and ''!=type ">
+            and type=#{type}
+        </if>
+        <if test="null!=bgColor and ''!=bgColor ">
+            and bg_color=#{bgColor}
+        </if>
+        <if test="null!=topName and ''!=topName ">
+            and top_name=#{topName}
+        </if>
+    </select>
+    <select id="queryTagByFolderId" parameterType="xin.charming.bean.Tag" resultType="xin.charming.bean.TagFolder">
+        SELECT
+            t.*,
+            ft.folder_id,
+            ft.orderby
+        FROM qg_tag t, qg_folder_tag ft
+        WHERE t.id = ft.tag_id AND folder_id = #{folderId}
+        ORDER BY ft.orderby
+    </select>
+    <select id="getMaxId" resultType="java.lang.Integer">
+        SELECT max(id) id
+        FROM qg_tag;
+    </select>
+    <select id="getFidByTag" resultType="java.lang.Integer">
+        SELECT folder_id
+        FROM qg_folder_tag
+        WHERE tag_id = #{id}
+    </select>
+
+    <select id="getByPrimaryKey" parameterType="xin.charming.bean.Tag" resultType="xin.charming.bean.Tag">
+        SELECT *
+        FROM qg_tag
+        WHERE id = #{id}
+    </select>
+</mapper>

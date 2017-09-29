@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="folder">
+    <resultMap id="BaseResultMap" type="xin.charming.bean.Folder">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="fname" jdbcType="VARCHAR" property="fname"/>
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+    </resultMap>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from qg_folder
+        where 1=1
+        <if test="id!= null and id!=0">
+            AND id=#{id}
+        </if>
+        <if test="uid != null and uid!=0">
+            AND uid=#{uid}
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="xin.charming.bean.Folder">
+        INSERT INTO qg_folder (id, fname, uid
+        )
+        VALUES (#{id,jdbcType=INTEGER}, #{fname,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <insert id="insertSelective" parameterType="xin.charming.bean.Folder">
+        insert into qg_folder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="fname != null">
+                fname,
+            </if>
+            <if test="uid != null">
+                uid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="fname != null">
+                #{fname,jdbcType=VARCHAR},
+            </if>
+            <if test="uid != null">
+                #{uid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="xin.charming.bean.Folder">
+        update qg_folder
+        <set>
+            <if test="fname!=null and fname!=''">
+                fname = #{fname},
+            </if>
+            <if test="uid!=null and uid!=''">
+                uid = #{uid},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="queryFolderByUid" parameterType="xin.charming.bean.Folder" resultType="xin.charming.bean.Folder">
+        SELECT *
+        FROM qg_folder
+        WHERE uid = #{uid}
+    </select>
+
+    <!--TagFolder-->
+    <insert id="insertTagFolder" parameterType="xin.charming.bean.TagFolder">
+        insert into qg_folder_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="folderId!= null and folderId!=0">
+                folder_id,
+            </if>
+            <if test="tagId != null and tagId!=0">
+                tag_id,
+            </if>
+            <if test="orderby != null">
+                orderby,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="folderId!= null and folderId!=0">
+                #{folderId},
+            </if>
+            <if test="tagId != null and tagId!=0">
+                #{tagId},
+            </if>
+            <if test="orderby != null">
+                #{orderby},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateTagFolderByTid" parameterType="xin.charming.bean.TagFolder">
+        update qg_folder_tag
+        <set>
+            <if test="folderId!=null and folderId!=0">
+                folder_id = #{folderId},
+            </if>
+            <if test="orderby != null and orderby!=0">
+                orderby=#{orderby},
+            </if>
+        </set>
+        where tag_id = #{tagId}
+    </update>
+    <select id="queryTagFolderByTid" parameterType="xin.charming.bean.Tag" resultType="xin.charming.bean.TagFolder">
+        SELECT *
+        FROM qg_folder_tag
+        WHERE tag_id = #{id}
+    </select>
+
+    <delete id="deleteTagFolder" parameterType="xin.charming.bean.TagFolder">
+        delete from qg_folder_tag where 1=1
+        <if test="folderId!=null and folderId!=0">
+            and folder_id = #{folderId}
+        </if>
+        <if test="tagId!=null and tagId!=0">
+            and tag_id = #{tagId}
+        </if>
+    </delete>
+
+    <select id="getMaxOrderbyWithFolderId" parameterType="xin.charming.bean.TagFolder" resultType="java.lang.Integer">
+        SELECT MAX(orderby)
+        FROM qg_folder_tag
+        WHERE folder_id = #{folderId}
+    </select>
+
+    <insert id="insertTagFolderSimple" parameterType="xin.charming.bean.TagFolder">
+        INSERT INTO qg_folder_tag (folder_id, tag_id, orderby) VALUES (
+            #{folderId}, #{tagId}, #{orderby}
+        );
+    </insert>
+    <update id="updateOrderbyHeigher" parameterType="xin.charming.bean.TagFolder">
+        UPDATE qg_folder_tag
+        SET orderby = orderby + 1
+        WHERE orderby <![CDATA[>]]> #{orderby} AND folder_id = #{folderId}
+    </update>
+
+    <select id="getMaxId" resultType="java.lang.Integer">
+        SELECT MAX(id)
+        FROM qg_folder
+    </select>
+</mapper>
